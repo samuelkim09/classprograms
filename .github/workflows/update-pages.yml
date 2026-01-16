@@ -13,15 +13,31 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Generate pages list
+      - name: Generate pages list with titles
         run: |
-          echo "## 📄 Pages disponibles" > pages.tmp
+          echo '<input type="text" id="search" placeholder="🔍 Rechercher une page..." onkeyup="filterPages()" style="width:100%;padding:8px;margin-bottom:10px;">' > pages.tmp
           echo "" >> pages.tmp
+          echo "<ul id=\"pages\">" >> pages.tmp
 
           for file in *.html; do
-            name=$(basename "$file")
-            echo "- [$name]($name)" >> pages.tmp
+            title=$(grep -i "<title>" "$file" | sed -E 's/.*<title>(.*)<\/title>.*/\1/I')
+            if [ -z "$title" ]; then
+              title="$file"
+            fi
+            echo "<li data-title=\"$title\"><a href=\"$file\">$title</a></li>" >> pages.tmp
           done
+
+          echo "</ul>" >> pages.tmp
+          echo "" >> pages.tmp
+
+          echo "<script>" >> pages.tmp
+          echo "function filterPages() {" >> pages.tmp
+          echo "  const q = document.getElementById('search').value.toLowerCase();" >> pages.tmp
+          echo "  document.querySelectorAll('#pages li').forEach(li => {" >> pages.tmp
+          echo "    li.style.display = li.dataset.title.toLowerCase().includes(q) ? '' : 'none';" >> pages.tmp
+          echo "  });" >> pages.tmp
+          echo "}" >> pages.tmp
+          echo "</script>" >> pages.tmp
 
           awk '
             BEGIN {p=1}
@@ -37,5 +53,5 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add README.md
-          git commit -m "🔄 Update pages list" || exit 0
+          git commit -m "🔄 Update pages list (titles + search)" || exit 0
           git push
