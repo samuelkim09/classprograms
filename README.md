@@ -1,9 +1,9 @@
 # 🌐 pages
 
-## 📄 Pages disponibles
+## 📄 pages disponibles
 
 <!-- PAGES-LIST:START -->
 <!-- PAGES-LIST:END -->
 
 ---
-🔄 Cette liste est générée automatiquement.
+🔄 cette liste est générée automatiquement.
