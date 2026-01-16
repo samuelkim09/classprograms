@@ -1,0 +1,41 @@
+name: Update README pages list
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Generate pages list
+        run: |
+          echo "## 📄 Pages disponibles" > pages.tmp
+          echo "" >> pages.tmp
+
+          for file in *.html; do
+            name=$(basename "$file")
+            echo "- [$name]($name)" >> pages.tmp
+          done
+
+          awk '
+            BEGIN {p=1}
+            /<!-- PAGES-LIST:START -->/ {print; system("cat pages.tmp"); p=0}
+            /<!-- PAGES-LIST:END -->/ {p=1}
+            p {print}
+          ' README.md > README.new
+
+          mv README.new README.md
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add README.md
+          git commit -m "🔄 Update pages list" || exit 0
+          git push
