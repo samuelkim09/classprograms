@@ -10,25 +10,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate pages list with titles
+      - name: Generate pages list with titles and search
         run: |
           echo '<input type="text" id="search" placeholder="🔍 Rechercher une page..." onkeyup="filterPages()" style="width:100%;padding:8px;margin-bottom:10px;">' > pages.tmp
-          echo "" >> pages.tmp
           echo "<ul id=\"pages\">" >> pages.tmp
 
           for file in *.html; do
-            title=$(grep -i "<title>" "$file" | sed -E 's/.*<title>(.*)<\/title>.*/\1/I')
+            # 1️⃣ Priorité : const PAGE_TITLE = "..."
+            title=$(grep -oP 'const\s+PAGE_TITLE\s*=\s*"\K[^"]+' "$file")
+
+            # 2️⃣ Sinon : balise <title>
+            if [ -z "$title" ]; then
+              title=$(grep -i "<title>" "$file" | sed -E 's/.*<title>(.*)<\/title>.*/\1/I')
+            fi
+
+            # 3️⃣ Fallback : nom du fichier
             if [ -z "$title" ]; then
               title="$file"
             fi
+
             echo "<li data-title=\"$title\"><a href=\"$file\">$title</a></li>" >> pages.tmp
           done
 
           echo "</ul>" >> pages.tmp
-          echo "" >> pages.tmp
 
           echo "<script>" >> pages.tmp
           echo "function filterPages() {" >> pages.tmp
@@ -40,18 +47,18 @@ jobs:
           echo "</script>" >> pages.tmp
 
           awk '
-            BEGIN {p=1}
-            /<!-- PAGES-LIST:START -->/ {print; system("cat pages.tmp"); p=0}
-            /<!-- PAGES-LIST:END -->/ {p=1}
-            p {print}
+            BEGIN {print_mode=1}
+            /<!-- PAGES-LIST:START -->/ {print; system("cat pages.tmp"); print_mode=0}
+            /<!-- PAGES-LIST:END -->/ {print_mode=1}
+            print_mode {print}
           ' README.md > README.new
 
           mv README.new README.md
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add README.md
-          git commit -m "🔄 Update pages list (titles + search)" || exit 0
+          git commit -m "🔄 Update pages list (dynamic titles + search)" || exit 0
           git push
