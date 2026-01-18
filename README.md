@@ -8,6 +8,7 @@
 <ul id="pages">
 <li data-title="Lewis_Géométrie_Polarité.html"><a href="Lewis_Géométrie_Polarité.html">Lewis_Géométrie_Polarité.html</a></li>
 <li data-title="QCM Mathématiques Première Spé (Bac blanc) - Mathaléa"><a href="qcm-mathématiques-mathaléa-premierespe.html">QCM Mathématiques Première Spé (Bac blanc) - Mathaléa</a></li>
+<li data-title="quiz_vocabulaire_anglais_esclavage.html"><a href="quiz_vocabulaire_anglais_esclavage.html">quiz_vocabulaire_anglais_esclavage.html</a></li>
 </ul>
 
 <script>
