@@ -2,7 +2,16 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>QCM Mathématiques Première Spé (Bac blanc) - Mathaléa</title>
+
+    <!-- =====================
+         VARIABLES À MODIFIER
+    ====================== -->
+    <script>
+        const PAGE_TITLE = "QCM Mathématiques Première Spé (Bac blanc) - Mathaléa";
+        const IFRAME_URL = "https://claude.site/public/artifacts/1654b169-a0ae-4cee-96e0-bb55cc004e54/embed";
+    </script>
+
+    <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -30,11 +39,20 @@
 <body>
 
     <iframe
-        src="https://claude.site/public/artifacts/1654b169-a0ae-4cee-96e0-bb55cc004e54/embed"
-        title="Claude Artifact"
+        id="artifactFrame"
+        title=""
         allow="clipboard-write"
         allowfullscreen>
     </iframe>
+
+    <script>
+        // Injection des variables
+        document.title = PAGE_TITLE;
+
+        const iframe = document.getElementById("artifactFrame");
+        iframe.src = IFRAME_URL;
+        iframe.title = PAGE_TITLE;
+    </script>
 
 </body>
 </html>
