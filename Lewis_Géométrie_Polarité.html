@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- =====================
+         VARIABLES À MODIFIER
+    ====================== -->
+    <script>
+        const PAGE_TITLE = "Lewis • Géométrie • Polarité (1re spé Physique-Chimie)";
+        const IFRAME_URL = "https://claude.site/public/artifacts/d5ed86d9-c97d-4b1b-8cca-4bbee3fa56e0/embed";
+    </script>
+
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* Reset total */
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* pas de scroll */
+        }
+
+        body {
+            background: #000;
+        }
+
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <iframe
+        id="artifactFrame"
+        title=""
+        allow="clipboard-write"
+        allowfullscreen>
+    </iframe>
+
+    <script>
+        // Injection des variables
+        document.title = PAGE_TITLE;
+
+        const iframe = document.getElementById("artifactFrame");
+        iframe.src = IFRAME_URL;
+        iframe.title = PAGE_TITLE;
+    </script>
+
+</body>
+</html>
